@@ -7,6 +7,7 @@ public class HideWall : MonoBehaviour
     [SerializeField] Material original;
     [SerializeField] Material transparent;
     [SerializeField] Vector2 size;
+    [SerializeField] float maxZDetectionDistance;
     [SerializeField] Transform player;
     [SerializeField] Renderer[] objects;
 
@@ -29,8 +30,9 @@ public class HideWall : MonoBehaviour
         {
             if (obj == null) return;
             obj.material = (player.position.z >= (obj.transform.position.z + size.y) && 
-                player.position.x >= (obj.transform.position.x + size.x) && 
-                player.position.x <= (obj.transform.position.z - size.x))? 
+                player.position.x >= (obj.transform.position.x - size.x) && 
+                player.position.x <= (obj.transform.position.x + size.x) && 
+                (player.position.z - obj.transform.position.z) <= maxZDetectionDistance)? 
                 transparent : original;
         }
     }
