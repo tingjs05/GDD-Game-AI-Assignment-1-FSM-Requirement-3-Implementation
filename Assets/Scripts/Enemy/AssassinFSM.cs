@@ -21,9 +21,12 @@ public class AssassinFSM : MonoBehaviour
     [field: Header("Durations")]
     [field: SerializeField] public float AttackDuration { get; private set; } = 0.25f;
     [field: SerializeField] public float MaxFleeDuration { get; private set; } = 5f;
+    [field: SerializeField] public float MinFaceEnemyDuration { get; private set; } = 0.5f;
+    [field: SerializeField] public float MaxHideDuration { get; private set; } = 5f;
 
     [Header("Thresholds")]
     [SerializeField, Range(0f, 1f)] private float facingEnemyThreshold = 0.8f;
+    [field: SerializeField] public float MinHideDistanceThreshold = 3f;
 
     // states
     private State currentState;
