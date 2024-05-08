@@ -11,7 +11,8 @@ public class HideState : State
 
     public override void OnEnter()
     {
-        
+        // log state transition
+        Debug.Log("HIDE: run away and hide from player to not let player see you. ");
     }
 
     public override void OnUpdate()

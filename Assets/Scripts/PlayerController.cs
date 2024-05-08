@@ -60,14 +60,13 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
-        
-        // reset move direction
-        MoveDir = Vector3.zero;
     }
 
     // handle states
     void idle()
     {
+        // reset move direction
+        MoveDir = Vector3.zero;
         if (new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) == Vector2.zero) return;
         currentState = State.MOVING;
     }
@@ -89,6 +88,9 @@ public class PlayerController : MonoBehaviour
 
     void pushing()
     {
+        // reset move direction
+        MoveDir = Vector3.zero;
+
         if (timeElapsed >= pushDuration)
         {
             PushedObject?.Invoke(this);
@@ -108,12 +110,17 @@ public class PlayerController : MonoBehaviour
 
     void death()
     {
+        // reset move direction
+        MoveDir = Vector3.zero;
         Debug.Log("Player Died: Game Lost!");
         Destroy(gameObject);
     }
 
     IEnumerator stunned()
     {
+        // reset move direction
+        MoveDir = Vector3.zero;
+        // wait for stun duration
         yield return new WaitForSeconds(stunDuration);
         coroutine = null;
         currentState = State.IDLE;

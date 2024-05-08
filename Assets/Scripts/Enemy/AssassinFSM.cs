@@ -22,6 +22,9 @@ public class AssassinFSM : MonoBehaviour
     [field: SerializeField] public float AttackDuration { get; private set; } = 0.25f;
     [field: SerializeField] public float MaxFleeDuration { get; private set; } = 5f;
 
+    [Header("Thresholds")]
+    [SerializeField, Range(0f, 1f)] private float facingEnemyThreshold = 0.8f;
+
     // states
     private State currentState;
 
@@ -90,6 +93,7 @@ public class AssassinFSM : MonoBehaviour
         currentState?.OnEnter();
     }
 
+    // check if player is nearby within a certain range around the enemy
     public bool PlayerNearby(float range, out Transform player)
     {
         // use sphere cast all, check all nearby objects
@@ -110,7 +114,8 @@ public class AssassinFSM : MonoBehaviour
         player = null;
         return false;
     }
-
+    
+    // get a random point around a center point (usually self)
     public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
         // get a random point in a sphere
@@ -124,6 +129,20 @@ public class AssassinFSM : MonoBehaviour
         }
         result = Vector3.zero;
         return false;
+    }
+
+    // check if the player is moving towards the enemy
+    public bool PlayerIsMovingTowardsEnemy(Transform player)
+    {
+        // get direction player would have to move in to go towards enemy
+        Vector3 dirFromPlayer = (transform.position - player.position).normalized;
+        // get player controller, return false if not found
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController == null) return false;
+        // return false if the player is not moving
+        if (playerController.MoveDir == Vector3.zero) return false;
+        // use dot product to see how close the player is moving towards the enemy
+        return Mathf.Abs(Vector3.Dot(playerController.MoveDir, dirFromPlayer) * dirFromPlayer.magnitude) >= facingEnemyThreshold;
     }
 
     // gizmos

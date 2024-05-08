@@ -24,19 +24,20 @@ public class ProwlState : State
     public override void OnUpdate()
     {
         // check if player is still within alert radius
-        if (!_fsm.PlayerNearby(_fsm.AlertRadius, out player))
+        // check if player is within line of sight, if in line of sight, transition to prowl state
+        RaycastHit hit;
+        if (!_fsm.PlayerNearby(_fsm.AlertRadius, out player) || 
+            !Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out hit, 
+                Vector3.Distance(player.position, _fsm.transform.position)) || 
+            !hit.collider.CompareTag("Player"))
         {
             _fsm.SwitchState(_fsm.Alert);
             return;
         }
 
-        // check if player is within line of sight, if in line of sight, transition to prowl state
-        RaycastHit hit;
-        if (!Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out hit, 
-            Vector3.Distance(player.position, _fsm.transform.position)) || !hit.collider.CompareTag("Player"))
+        if (_fsm.PlayerIsMovingTowardsEnemy(player))
         {
-            Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.yellow);
-            _fsm.SwitchState(_fsm.Alert);
+            _fsm.SwitchState(_fsm.Hide);
             return;
         }
 
