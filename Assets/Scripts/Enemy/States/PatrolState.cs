@@ -14,6 +14,8 @@ public class PatrolState : State
 
     public override void OnEnter()
     {
+        // log state transition
+        Debug.Log("PATROL: randomly wander around the hallway. ");
         // reset random output point
         point = Vector3.zero;
         // set agent move speed to walk speed
