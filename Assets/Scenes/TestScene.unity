@@ -1689,6 +1689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2037433272}
   - component: {fileID: 2037433273}
+  - component: {fileID: 2037433274}
   m_Layer: 0
   m_Name: Walls
   m_TagString: Untagged
@@ -1732,11 +1733,32 @@ MonoBehaviour:
   size: {x: 2, y: 1.5}
   maxZDetectionDistance: 5
   player: {fileID: 749440061}
+  showGizmos: 0
   objects:
   - {fileID: 210424119}
   - {fileID: 848398915}
   - {fileID: 768343560}
   - {fileID: 1471595730}
+--- !u!114 &2037433274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037433271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dd71d558bf772440b2c5fc2f4b2ab96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cornerOffset: 0.5
+  size: {x: 2, y: 1.5}
+  showGizmos: 1
+  walls:
+  - {fileID: 210424117}
+  - {fileID: 848398913}
+  - {fileID: 768343558}
+  - {fileID: 1471595728}
 --- !u!1 &2077122687
 GameObject:
   m_ObjectHideFlags: 0

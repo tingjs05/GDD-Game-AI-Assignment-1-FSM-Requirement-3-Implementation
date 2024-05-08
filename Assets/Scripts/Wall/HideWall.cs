@@ -9,6 +9,7 @@ public class HideWall : MonoBehaviour
     [SerializeField] Vector2 size;
     [SerializeField] float maxZDetectionDistance;
     [SerializeField] Transform player;
+    [SerializeField] bool showGizmos;
     [SerializeField] Renderer[] objects;
 
     // Start is called before the first frame update
@@ -39,6 +40,8 @@ public class HideWall : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        if (!showGizmos) return;
+
         Gizmos.color = Color.blue;
 
         foreach (Renderer obj in objects)
