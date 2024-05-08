@@ -123,9 +123,8 @@ public class AssassinFSM : MonoBehaviour
     {
         // get a random point in a sphere
         Vector3 randomPoint = center + Random.insideUnitSphere * range;
-        NavMeshHit hit;
         // get the position on the random point on the navmesh
-        if (NavMesh.SamplePosition(randomPoint, out hit, 1f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1f, NavMesh.AllAreas))
         {
             result = hit.position;
             return true;

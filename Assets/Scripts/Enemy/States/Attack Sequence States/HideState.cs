@@ -51,8 +51,20 @@ public class HideState : State
             }
             return;
         }
+        
+        // check if player is within line of sight, if in alert range and line of sight, transition to prowl state
+        if (_fsm.PlayerNearby(_fsm.AlertRadius, out Transform player) && 
+            Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out RaycastHit hit,
+            Vector3.Distance(player.position, _fsm.transform.position)) && hit.collider.CompareTag("Player"))
+        {
+            Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.red);
+            _fsm.StopCoroutine(coroutine);
+            _fsm.SwitchState(_fsm.Prowl);
+            return;
+        }
 
-        // when in hiding spot, do stuff
+        // show line of sight ray even when player is not seen, if player is not null
+        if (player != null) Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.yellow);
     }
 
     public override void OnExit()

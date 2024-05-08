@@ -31,8 +31,7 @@ public class AlertState : State
         }
 
         // check if player is within line of sight, if in line of sight, transition to prowl state
-        RaycastHit hit;
-        if (Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out hit, 
+        if (Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out RaycastHit hit,
             Vector3.Distance(player.position, _fsm.transform.position)) && hit.collider.CompareTag("Player"))
         {
             Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.red);

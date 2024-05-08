@@ -27,10 +27,9 @@ public class ProwlState : State
     {
         // check if player is still within alert radius
         // check if player is within line of sight, if in line of sight, transition to prowl state
-        RaycastHit hit;
-        if (!_fsm.PlayerNearby(_fsm.AlertRadius, out player) || 
-            !Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out hit, 
-                Vector3.Distance(player.position, _fsm.transform.position)) || 
+        if (!_fsm.PlayerNearby(_fsm.AlertRadius, out player) ||
+            !Physics.Raycast(_fsm.transform.position, (player.position - _fsm.transform.position).normalized, out RaycastHit hit,
+                Vector3.Distance(player.position, _fsm.transform.position)) ||
             !hit.collider.CompareTag("Player"))
         {
             _fsm.SwitchState(_fsm.Alert);
@@ -45,7 +44,7 @@ public class ProwlState : State
         }
         
         // cancel coroutine if player breaks is moving towards enemy condition
-        _fsm.StopCoroutine(coroutine);
+        if (coroutine != null) _fsm.StopCoroutine(coroutine);
 
         // check if player is within attack range, if so, switch to attack state
         if (Vector3.Distance(_fsm.transform.position, player.position) <= _fsm.AttackRange)
