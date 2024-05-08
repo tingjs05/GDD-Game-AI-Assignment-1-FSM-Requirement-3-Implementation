@@ -38,6 +38,13 @@ public class ProwlState : State
             return;
         }
 
+        // check if player is within attack range, if so, switch to attack state
+        if (Vector3.Distance(_fsm.transform.position, player.position) <= _fsm.AttackRange)
+        {
+            _fsm.SwitchState(_fsm.Attack);
+            return;
+        }
+
         if (_fsm.PlayerIsMovingTowardsEnemy(player))
         {
             // only assign if coroutine is null
@@ -47,13 +54,6 @@ public class ProwlState : State
         
         // cancel coroutine if player breaks is moving towards enemy condition
         if (coroutine != null) _fsm.StopCoroutine(coroutine);
-
-        // check if player is within attack range, if so, switch to attack state
-        if (Vector3.Distance(_fsm.transform.position, player.position) <= _fsm.AttackRange)
-        {
-            _fsm.SwitchState(_fsm.Attack);
-            return;
-        }
 
         // show line of sight ray if player is seen
         Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.red);
