@@ -5,6 +5,7 @@ using UnityEngine;
 public class ProwlState : State
 {
     Transform player;
+    Coroutine coroutine;
 
     public ProwlState(AssassinFSM fsm)
     {
@@ -15,8 +16,9 @@ public class ProwlState : State
     {
         // log state transition
         Debug.Log("PROWL: run towards player if player is within line of sight. ");
-        // reset player transform output
+        // reset player transform output and coroutine
         player = null;
+        coroutine = null;
         // set agent move speed to run speed
         _fsm.Agent.speed = _fsm.RunSpeed;
     }
@@ -37,9 +39,13 @@ public class ProwlState : State
 
         if (_fsm.PlayerIsMovingTowardsEnemy(player))
         {
-            _fsm.SwitchState(_fsm.Hide);
+            // only assign if coroutine is null
+            coroutine ??= _fsm.StartCoroutine(TrueForSetTime());
             return;
         }
+        
+        // cancel coroutine if player breaks is moving towards enemy condition
+        _fsm.StopCoroutine(coroutine);
 
         // check if player is within attack range, if so, switch to attack state
         if (Vector3.Distance(_fsm.transform.position, player.position) <= _fsm.AttackRange)
@@ -52,5 +58,23 @@ public class ProwlState : State
         Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.red);
         // set target position to run towards player
         _fsm.Agent.SetDestination(player.position);
+    }
+
+    public override void OnExit()
+    {
+        // ensure only one coroutine runs at one time
+        if (coroutine != null)
+        {
+            _fsm.StopCoroutine(coroutine);
+            coroutine = null;
+        }
+    }
+
+    IEnumerator TrueForSetTime()
+    {
+        yield return new WaitForSeconds(_fsm.MinFaceEnemyDuration);
+        coroutine = null;
+        // switch to hide if player walking towards enemy for minFaceEnemyDuration
+        _fsm.SwitchState(_fsm.Hide);
     }
 }
