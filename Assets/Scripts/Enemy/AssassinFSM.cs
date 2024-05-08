@@ -20,6 +20,7 @@ public class AssassinFSM : MonoBehaviour
 
     [field: Header("Durations")]
     [field: SerializeField] public float AttackDuration { get; private set; } = 0.25f;
+    [field: SerializeField] public float MaxFleeDuration { get; private set; } = 5f;
 
     // states
     private State currentState;

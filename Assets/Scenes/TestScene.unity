@@ -380,6 +380,7 @@ MonoBehaviour:
   <AttackRange>k__BackingField: 1
   <FleeDistance>k__BackingField: 5
   <AttackDuration>k__BackingField: 0.25
+  <MaxFleeDuration>k__BackingField: 5
 --- !u!54 &65462329
 Rigidbody:
   m_ObjectHideFlags: 0
