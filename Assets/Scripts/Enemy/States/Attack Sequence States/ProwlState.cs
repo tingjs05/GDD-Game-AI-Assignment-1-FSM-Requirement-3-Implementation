@@ -40,14 +40,16 @@ public class ProwlState : State
             return;
         }
 
+        // check if player is within attack range, if so, switch to attack state
+        if (Vector3.Distance(_fsm.transform.position, player.position) <= _fsm.AttackRange)
+        {
+            _fsm.SwitchState(_fsm.Attack);
+            return;
+        }
+
         // show line of sight ray if player is seen
         Debug.DrawRay(_fsm.transform.position, player.position - _fsm.transform.position, Color.red);
         // set target position to run towards player
         _fsm.Agent.SetDestination(player.position);
-    }
-
-    public override void OnExit()
-    {
-
     }
 }

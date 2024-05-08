@@ -378,6 +378,8 @@ MonoBehaviour:
   <PatrolRadius>k__BackingField: 3
   <AlertRadius>k__BackingField: 2.3
   <AttackRange>k__BackingField: 1
+  <FleeDistance>k__BackingField: 5
+  <AttackDuration>k__BackingField: 0.25
 --- !u!54 &65462329
 Rigidbody:
   m_ObjectHideFlags: 0

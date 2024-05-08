@@ -16,6 +16,10 @@ public class AssassinFSM : MonoBehaviour
     [field: SerializeField] public float PatrolRadius { get; private set; } = 3f;
     [field: SerializeField] public float AlertRadius { get; private set; } = 3.5f;
     [field: SerializeField] public float AttackRange { get; private set; } = 1f;
+    [field: SerializeField] public float FleeDistance { get; private set; } = 5f;
+
+    [field: Header("Durations")]
+    [field: SerializeField] public float AttackDuration { get; private set; } = 0.25f;
 
     // states
     private State currentState;
@@ -133,5 +137,8 @@ public class AssassinFSM : MonoBehaviour
         // show attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, AttackRange);
+        // show flee distance
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, FleeDistance);
     }
 }

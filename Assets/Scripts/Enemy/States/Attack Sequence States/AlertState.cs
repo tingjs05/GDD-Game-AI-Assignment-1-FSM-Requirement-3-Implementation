@@ -45,9 +45,4 @@ public class AlertState : State
         // set target position to slowly walk towards player
         _fsm.Agent.SetDestination(player.position);
     }
-
-    public override void OnExit()
-    {
-
-    }
 }

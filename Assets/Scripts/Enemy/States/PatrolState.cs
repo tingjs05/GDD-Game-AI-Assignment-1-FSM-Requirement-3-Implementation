@@ -40,9 +40,4 @@ public class PatrolState : State
         // set target position to walk towards
         _fsm.Agent.SetDestination(point);
     }
-
-    public override void OnExit()
-    {
-
-    }
 }

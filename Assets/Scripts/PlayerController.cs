@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float pushDuration = 2f;
     [SerializeField] float stunDuration = 2.5f;
 
+    public Vector3 MoveDir { get; private set; }
+
     public static event System.Action<PlayerController> PushedObject;
 
     // Start is called before the first frame update
@@ -58,6 +60,9 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
+        
+        // reset move direction
+        MoveDir = Vector3.zero;
     }
 
     // handle states
@@ -69,17 +74,17 @@ public class PlayerController : MonoBehaviour
 
     void moving()
     {
-        Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
+        MoveDir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
         
         // check for state transition to idle
-        if (moveDir == Vector3.zero)
+        if (MoveDir == Vector3.zero)
         {
             currentState = State.IDLE;
             return;
         }
 
         // check for running (shift pressed), if running, multiple speed by 1.5f.
-        rb.AddForce(moveDir * moveSpeed * (Input.GetKey(KeyCode.LeftShift)? 1.5f : 1f));
+        rb.AddForce(MoveDir * moveSpeed * (Input.GetKey(KeyCode.LeftShift)? 1.5f : 1f));
     }
 
     void pushing()
