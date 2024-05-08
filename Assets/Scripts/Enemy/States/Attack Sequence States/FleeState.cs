@@ -16,6 +16,8 @@ public class FleeState : State
     {
         // log state transition
         Debug.Log("FLEE: Run away from player until flee distance. ");
+        // set state text in UI
+        _fsm.SetStateText("Flee State");
         // reset player transform output
         player = null;
         // set agent move speed to run speed

@@ -16,6 +16,8 @@ public class PatrolState : State
     {
         // log state transition
         Debug.Log("PATROL: randomly wander around the hallway. ");
+        // set state text in UI
+        _fsm.SetStateText("Patrol State");
         // reset random output point
         point = Vector3.zero;
         // set agent move speed to walk speed

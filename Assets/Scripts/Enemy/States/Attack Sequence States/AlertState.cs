@@ -15,6 +15,8 @@ public class AlertState : State
     {
         // log state transition
         Debug.Log("ALERT: slowly move towards player if player is nearby. ");
+        // set state text in UI
+        _fsm.SetStateText("Alert State");
         // reset player transform output
         player = null;
         // set agent move speed to sneak speed

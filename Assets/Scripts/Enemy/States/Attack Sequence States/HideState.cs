@@ -17,6 +17,8 @@ public class HideState : State
     {
         // log state transition
         Debug.Log("HIDE: run away and hide from player to not let player see you. ");
+        // set state text in UI
+        _fsm.SetStateText("Hide State");
         // reset coroutine
         coroutine = null;
         // set agent move speed to run speed

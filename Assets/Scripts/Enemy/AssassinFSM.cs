@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class AssassinFSM : MonoBehaviour
@@ -27,6 +28,9 @@ public class AssassinFSM : MonoBehaviour
     [Header("Thresholds")]
     [SerializeField, Range(0f, 1f)] private float facingEnemyThreshold = 0.8f;
     [field: SerializeField] public float MinHideDistanceThreshold = 3f;
+
+    [Header("UI Display")]
+    [SerializeField] Text stateText;
 
     // states
     private State currentState;
@@ -94,6 +98,12 @@ public class AssassinFSM : MonoBehaviour
         currentState?.OnExit();
         currentState = newState;
         currentState?.OnEnter();
+    }
+
+    public void SetStateText(string text)
+    {
+        if (stateText == null) return;
+        stateText.text = text;
     }
 
     // check if player is nearby within a certain range around the enemy

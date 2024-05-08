@@ -16,6 +16,8 @@ public class ProwlState : State
     {
         // log state transition
         Debug.Log("PROWL: run towards player if player is within line of sight. ");
+        // set state text in UI
+        _fsm.SetStateText("Prowl State");
         // reset player transform output and coroutine
         player = null;
         coroutine = null;

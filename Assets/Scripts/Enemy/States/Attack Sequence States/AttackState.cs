@@ -16,6 +16,8 @@ public class AttackState : State
     {
         // log state transition
         Debug.Log("ATTACK: attempt to damage the player. ");
+        // set state text in UI
+        _fsm.SetStateText("Attack State");
         // reset player transform output
         player = null;
         // attack player
