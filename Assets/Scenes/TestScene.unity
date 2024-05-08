@@ -376,6 +376,8 @@ MonoBehaviour:
   <RunSpeed>k__BackingField: 4
   <SneakSpeed>k__BackingField: 0.5
   <PatrolRadius>k__BackingField: 3
+  <AlertRadius>k__BackingField: 2.3
+  <AttackRange>k__BackingField: 1
 --- !u!54 &65462329
 Rigidbody:
   m_ObjectHideFlags: 0

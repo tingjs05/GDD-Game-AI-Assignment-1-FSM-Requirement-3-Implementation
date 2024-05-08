@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PatrolState : State
 {
+    Transform player;
     Vector3 point;
 
     public PatrolState(AssassinFSM fsm)
@@ -21,6 +22,14 @@ public class PatrolState : State
 
     public override void OnUpdate()
     {
+        // check for transition to alert state
+        // check if player is within alert radius
+        if (_fsm.PlayerNearby(_fsm.AlertRadius, out player))
+        {
+            _fsm.SwitchState(_fsm.Alert);
+            return;
+        }
+
         // otherwise, just patrol the area, set a random location to walk towards to patrol
         // ensure agent is not at stopping distance (aka has reached last set position)
         if (!(_fsm.Agent.remainingDistance <= _fsm.Agent.stoppingDistance)) return;

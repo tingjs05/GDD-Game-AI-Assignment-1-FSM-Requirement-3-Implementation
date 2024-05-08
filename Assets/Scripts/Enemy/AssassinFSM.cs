@@ -85,6 +85,20 @@ public class AssassinFSM : MonoBehaviour
         currentState?.OnEnter();
     }
 
+    public bool PlayerNearby(float range, out Transform player)
+    {
+        // create a hit variable for output
+        RaycastHit hit;
+        // use sphere cast, and ensure hit object has the 'Player' tag
+        if (Physics.SphereCast(transform.position, range, transform.forward, out hit) && hit.collider.CompareTag("Player"))
+        {
+            player = hit.transform;
+            return true;
+        }
+        player = null;
+        return false;
+    }
+
     public bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
         // get a random point in a sphere
@@ -106,5 +120,11 @@ public class AssassinFSM : MonoBehaviour
         // show patrol radius
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, PatrolRadius);
+        // show alert radius
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, AlertRadius);
+        // show attack range
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
 }
