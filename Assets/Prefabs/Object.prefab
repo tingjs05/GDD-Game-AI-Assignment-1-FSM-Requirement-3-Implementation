@@ -165,5 +165,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropAngle: 90
-  dropSpeed: 1
+  dropSpeed: 2
   hitbox: {fileID: 5068315963696153687}

@@ -17,11 +17,14 @@ public class PlayerController : MonoBehaviour
     State currentState;
     Rigidbody rb;
     Coroutine coroutine;
+    LayerMask obstacleMask;
     float timeElapsed = 0f;
 
     [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float pushDuration = 2f;
+    [SerializeField] float pushDuration = 1.2f;
     [SerializeField] float stunDuration = 2.5f;
+    [SerializeField] float interationRange = 1f;
+    [SerializeField] GameObject controlHint;
 
     public Vector3 MoveDir { get; private set; }
 
@@ -30,13 +33,22 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // assign variables
         rb = GetComponent<Rigidbody>();
+        obstacleMask = LayerMask.GetMask("Obstacles");
+        // hide UI game objects
+        if (controlHint != null) controlHint.SetActive(false);
+        // set default state
         currentState = State.IDLE;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // check any state transitions
+        HandleInteractionWithObject();
+
+        // handle state behaviours
         switch (currentState)
         {
             case State.IDLE:
@@ -58,8 +70,13 @@ public class PlayerController : MonoBehaviour
             default:
                 Debug.LogError("State not found.");
                 break;
-
         }
+    }
+
+    // gizmos
+    void OnDrawGizmosSelected() 
+    {
+        Gizmos.DrawWireSphere(transform.position, interationRange);
     }
 
     // handle states
@@ -98,13 +115,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) != Vector2.zero)
-        {
-            timeElapsed = 0f;
-            currentState = State.MOVING;
-            return;
-        }
-
         timeElapsed += Time.deltaTime;
     }
 
@@ -124,5 +134,40 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(stunDuration);
         coroutine = null;
         currentState = State.IDLE;
+    }
+
+    // other methods
+    void HandleInteractionWithObject()
+    {
+        // ensure state not in pushing
+        if (currentState == State.PUSHING) return;
+        // check if there are obstacles nearby
+        Collider[] hit = Physics.OverlapSphere(transform.position, interationRange, obstacleMask);
+        // exit function if no nearby obstacles are found, and hide UI
+        if (hit.Length <= 0)
+        {
+            if (controlHint != null) controlHint.SetActive(false);
+            return;
+        }
+        // show UI if near object
+        if (controlHint != null) controlHint.SetActive(true);
+        // check inputs
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // hide message
+            if (controlHint != null) controlHint.SetActive(false);
+            // reset time elasped
+            timeElapsed = 0f;
+            // change state
+            currentState = State.PUSHING;
+            // drop object when space is pressed
+            hit[0].transform.parent.GetComponent<PushableObject>()?.DropObject();
+        }
+    }
+
+    // public methods
+    public void Stun()
+    {
+        currentState = State.STUNNED;
     }
 }

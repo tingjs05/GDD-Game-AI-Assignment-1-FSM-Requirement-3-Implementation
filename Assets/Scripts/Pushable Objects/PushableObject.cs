@@ -28,10 +28,10 @@ public class PushableObject : MonoBehaviour
     IEnumerator Drop()
     {
         // slowly interpolate between current rotation and target angle
-        while (transform.rotation.x < dropAngle)
+        while (transform.rotation.eulerAngles.x < (dropAngle * 0.9f))
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, 
-                Quaternion.Euler(dropAngle, transform.rotation.y, transform.rotation.z), 
+                Quaternion.Euler(dropAngle, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z), 
                 dropSpeed * Time.deltaTime);
             yield return null;
         }
