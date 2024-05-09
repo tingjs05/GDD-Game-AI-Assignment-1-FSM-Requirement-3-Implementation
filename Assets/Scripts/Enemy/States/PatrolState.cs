@@ -6,6 +6,7 @@ public class PatrolState : State
 {
     Transform player;
     Vector3 point;
+    Coroutine coroutine;
 
     public PatrolState(AssassinFSM fsm)
     {
@@ -20,8 +21,12 @@ public class PatrolState : State
         _fsm.SetStateText("Patrol State");
         // reset random output point
         point = Vector3.zero;
+        // reset coroutine
+        coroutine = null;
         // set agent move speed to walk speed
         _fsm.Agent.speed = _fsm.WalkSpeed;
+        // start coroutine for periodic push spot check
+        coroutine = _fsm.StartCoroutine(PeriodicPushSpotCheck());
     }
 
     public override void OnUpdate()
@@ -41,5 +46,27 @@ public class PatrolState : State
         if (!_fsm.RandomPoint(_fsm.transform.position, _fsm.PatrolRadius, out point)) return;
         // set target position to walk towards
         _fsm.Agent.SetDestination(point);
+    }
+
+    public override void OnExit()
+    {
+        // ensure only one coroutine runs at one time
+        if (coroutine != null)
+        {
+            _fsm.StopCoroutine(coroutine);
+            coroutine = null;
+        }
+    }
+
+    IEnumerator PeriodicPushSpotCheck()
+    {
+        // randomly wait for seconds between two ranges
+        yield return new WaitForSeconds(Random.Range(_fsm.PushCheckCooldown.x, _fsm.PushCheckCooldown.y));
+        // randomly has a chance to transition to wait state
+        if (Random.Range(0f, 1f) < _fsm.PushTransitionChance)
+            _fsm.SwitchState(_fsm.Wait);
+        // if failed to switch to wait state, wait for another period
+        else
+            coroutine = _fsm.StartCoroutine(PeriodicPushSpotCheck());
     }
 }
