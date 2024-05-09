@@ -110,14 +110,14 @@ public class AssassinFSM : MonoBehaviour
     public bool PlayerNearby(float range, out Transform player)
     {
         // use sphere cast all, check all nearby objects
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, range, transform.forward);
+        Collider[] hits = Physics.OverlapSphere(transform.position, range);
         // check if anything is hit
         if (hits.Length > 0)
         {
             // loop through all hit objects and check if player is hit
-            foreach (RaycastHit hit in hits)
+            foreach (Collider hit in hits)
             {
-                if (hit.collider.CompareTag("Player"))
+                if (hit.CompareTag("Player"))
                 {
                     player = hit.transform;
                     return true;
