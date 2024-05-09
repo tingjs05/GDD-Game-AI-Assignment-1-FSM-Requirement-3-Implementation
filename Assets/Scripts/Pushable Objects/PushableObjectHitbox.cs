@@ -20,14 +20,11 @@ public class PushableObjectHitbox : MonoBehaviour
         // check collisions with player and enemy
         if (other.CompareTag("Player"))
         {
-            PlayerController controller = other.GetComponent<PlayerController>();
-            if (controller == null) return;
-            // stun player if hit
-            controller.Stun();
+            other.GetComponent<PlayerController>()?.Stun();
         }
         else if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Hit enemy!");
+            other.GetComponent<AssassinFSM>()?.Stun();
         }
     }
 }

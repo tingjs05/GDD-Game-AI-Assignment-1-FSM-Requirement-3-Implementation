@@ -24,6 +24,7 @@ public class AssassinFSM : MonoBehaviour
     [field: SerializeField] public float MaxFleeDuration { get; private set; } = 5f;
     [field: SerializeField] public float MinFaceEnemyDuration { get; private set; } = 0.5f;
     [field: SerializeField] public float MaxHideDuration { get; private set; } = 5f;
+    [field: SerializeField] public float StunDuration { get; private set; } = 3f;
 
     [Header("Thresholds")]
     [SerializeField, Range(0f, 1f)] private float facingEnemyThreshold = 0.8f;
@@ -104,6 +105,12 @@ public class AssassinFSM : MonoBehaviour
     {
         if (stateText == null) return;
         stateText.text = text;
+    }
+
+    // any state transitions
+    public void Stun()
+    {
+        SwitchState(Stunned);
     }
 
     // check if player is nearby within a certain range around the enemy
