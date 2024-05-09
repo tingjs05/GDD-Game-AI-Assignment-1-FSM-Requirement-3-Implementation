@@ -14,6 +14,10 @@ public class WaitState : State
 
     public override void OnEnter()
     {
+        // log state transition
+        Debug.Log("WAIT: wait behind an object, preparing to ambush player. ");
+        // set state text in UI
+        _fsm.SetStateText("Wait State");
         // ensure hiding spot manager is not null
         if (HidingPositionManager.Instance == null) return;
         // reset coroutine
