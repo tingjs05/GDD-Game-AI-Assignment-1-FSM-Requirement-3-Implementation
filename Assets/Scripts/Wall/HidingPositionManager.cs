@@ -6,11 +6,13 @@ public class HidingPositionManager : MonoBehaviour
 {
     [SerializeField] float cornerOffset;
     [SerializeField] Vector2 size;
+    [SerializeField] LayerMask obstacleMask;
     [SerializeField] bool showGizmos;
     [SerializeField] Transform[] walls;
 
     public static HidingPositionManager Instance { get; private set; }
     public List<Vector3> HidingSpots { get; private set; } = new List<Vector3>();
+    public List<Vector3> PushingSpots { get; private set; } = new List<Vector3>();
 
     void Awake()
     {
@@ -23,6 +25,7 @@ public class HidingPositionManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        obstacleMask = LayerMask.GetMask("Obstacles");
         GetHidingSpots();
     }
 
@@ -38,65 +41,62 @@ public class HidingPositionManager : MonoBehaviour
         {
             Gizmos.DrawSphere(spot, 0.5f);
         }
+
+        // show position of all pushing spots
+        Gizmos.color = Color.yellow;
+        foreach (Vector3 spot in PushingSpots)
+        {
+            Gizmos.DrawSphere(spot, 0.5f);
+        }
     }
 
     void GetHidingSpots()
     {
         // reset hiding spots list
         HidingSpots.Clear();
-        // instantiate array to store corners, and vectors for calculations
-        Vector3[] corners = new Vector3[4];
+        // instantiate temp spot positions for calculations
         Vector3 tempSpot1, tempSpot2;
 
         foreach (Transform wall in walls)
         {
             // corner 1
-            corners[0] = wall.position;
-            corners[0].x += size.x - cornerOffset;
-            corners[0].z +=  size.y - cornerOffset;
-            // calculate hiding spots
-            tempSpot1 = corners[0];
-            tempSpot2 = corners[0];
-            tempSpot1.x += cornerOffset * 2;
-            tempSpot2.z += cornerOffset * 2;
-            HidingSpots.Add(tempSpot1);
-            HidingSpots.Add(tempSpot2);
-
+            CalculateHidingSpotFromCorner(wall.position, true, true, out tempSpot1, out tempSpot2);
+            AddSpot(tempSpot1, 0.5f);
+            AddSpot(tempSpot2, 0.5f);
             // corner 2
-            corners[1] = wall.position;
-            corners[1].x += size.x - cornerOffset;
-            corners[1].z -=  size.y - cornerOffset;
-            // calculate hiding spots
-            tempSpot1 = corners[1];
-            tempSpot2 = corners[1];
-            tempSpot1.x += cornerOffset * 2;
-            tempSpot2.z -= cornerOffset * 2;
-            HidingSpots.Add(tempSpot1);
-            HidingSpots.Add(tempSpot2);
-
+            CalculateHidingSpotFromCorner(wall.position, true, false, out tempSpot1, out tempSpot2);
+            AddSpot(tempSpot1, 0.5f);
+            AddSpot(tempSpot2, 0.5f);
             // corner 3
-            corners[2] = wall.position;
-            corners[2].x -= size.x - cornerOffset;
-            corners[2].z +=  size.y - cornerOffset;
-            // calculate hiding spots
-            tempSpot1 = corners[2];
-            tempSpot2 = corners[2];
-            tempSpot1.x -= cornerOffset * 2;
-            tempSpot2.z += cornerOffset * 2;
-            HidingSpots.Add(tempSpot1);
-            HidingSpots.Add(tempSpot2);
-
+            CalculateHidingSpotFromCorner(wall.position, false, true, out tempSpot1, out tempSpot2);
+            AddSpot(tempSpot1, 0.5f);
+            AddSpot(tempSpot2, 0.5f);
             // corner 4
-            corners[3] = wall.position;
-            corners[3].x -= size.x - cornerOffset;
-            corners[3].z -=  size.y - cornerOffset;
-            // calculate hiding spots
-            tempSpot1 = corners[3];
-            tempSpot2 = corners[3];
-            tempSpot1.x -= cornerOffset * 2;
-            tempSpot2.z -= cornerOffset * 2;
-            HidingSpots.Add(tempSpot1);
-            HidingSpots.Add(tempSpot2);
+            CalculateHidingSpotFromCorner(wall.position, false, false, out tempSpot1, out tempSpot2);
+            AddSpot(tempSpot1, 0.5f);
+            AddSpot(tempSpot2, 0.5f);
         }
+    }
+
+    void CalculateHidingSpotFromCorner(Vector3 wallPosition, bool addX, bool addZ, out Vector3 tempSpot1, out Vector3 tempSpot2)
+    {
+        wallPosition.x = addX? wallPosition.x + (size.x - cornerOffset) : wallPosition.x - (size.x - cornerOffset);
+        wallPosition.z = addZ? wallPosition.z + (size.y - cornerOffset) : wallPosition.z - (size.y - cornerOffset);
+        tempSpot1 = wallPosition;
+        tempSpot2 = wallPosition;
+        tempSpot1.x = addX? tempSpot1.x + (cornerOffset * 2) : tempSpot1.x - (cornerOffset * 2);
+        tempSpot2.z = addZ? tempSpot1.z + (cornerOffset * 2) : tempSpot1.z - (cornerOffset * 2);
+    }
+
+    void AddSpot(Vector3 spot, float spotSize)
+    {
+        // add position to pushing spot if a pushable object is found within range
+        if (Physics.OverlapSphere(spot, spotSize, obstacleMask).Length > 0)
+        {
+            PushingSpots.Add(spot);
+            return;
+        }
+        // else add it to hiding spots
+        HidingSpots.Add(spot);
     }
 }
