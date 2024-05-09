@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
         currentState = State.IDLE;
     }
 
-    // other methods
+    // any state transition handlers
     void HandleInteractionWithObject()
     {
         // ensure state not in pushing
@@ -154,18 +154,22 @@ public class PlayerController : MonoBehaviour
         // check inputs
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            // drop object when space is pressed
+            PushableObject obj = hit[0].transform.parent.GetComponent<PushableObject>();
+            // check if object drop is successful
+            if (obj == null || !obj.DropObject(out Vector3 pushSpot)) return;
+            // handle successful response
+            // set position to pushing spot
+            transform.position = new Vector3(pushSpot.x, transform.position.y, pushSpot.z);
             // hide message
             if (controlHint != null) controlHint.SetActive(false);
             // reset time elasped
             timeElapsed = 0f;
-            // change state
+            // change state if pushing is successful
             currentState = State.PUSHING;
-            // drop object when space is pressed
-            hit[0].transform.parent.GetComponent<PushableObject>()?.DropObject();
         }
     }
 
-    // public methods
     public void Stun()
     {
         currentState = State.STUNNED;

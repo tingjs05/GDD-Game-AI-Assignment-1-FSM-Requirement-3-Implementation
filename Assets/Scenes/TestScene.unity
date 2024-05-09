@@ -1019,7 +1019,7 @@ MonoBehaviour:
   moveSpeed: 3.5
   pushDuration: 1.2
   stunDuration: 2.5
-  interationRange: 1
+  interationRange: 0.8
   controlHint: {fileID: 1278037967}
 --- !u!54 &749440063
 Rigidbody:
