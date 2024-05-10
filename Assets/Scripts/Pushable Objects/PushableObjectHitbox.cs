@@ -21,10 +21,12 @@ public class PushableObjectHitbox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>()?.Stun();
+            other.GetComponent<IDamagable>()?.Damage(1f);
         }
         else if (other.CompareTag("Enemy"))
         {
             other.GetComponent<AssassinFSM>()?.Stun();
+            other.GetComponent<IDamagable>()?.Damage(1f);
         }
     }
 }

@@ -11,16 +11,11 @@ public class DeathState : State
 
     public override void OnEnter()
     {
-        
-    }
-
-    public override void OnUpdate()
-    {
-
-    }
-
-    public override void OnExit()
-    {
-
+        // log state transition
+        Debug.Log("DEATH: destroy itself, game has ended. ");
+        // set state text in UI
+        _fsm.SetStateText("Death State");
+        // log end of game
+        Debug.Log("Enemy Died: Mission Sucessful!");
     }
 }

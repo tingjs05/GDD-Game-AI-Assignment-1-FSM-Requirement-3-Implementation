@@ -24,7 +24,7 @@ public class AttackState : State
         if (_fsm.PlayerNearby(_fsm.AttackRange, out player))
         {
             // damage player
-            Debug.Log("Hit player!");
+            player.GetComponent<IDamagable>()?.Damage(1f);
         }
         // start coroutine to wait for state transition
         coroutine = _fsm.StartCoroutine(WaitForState());

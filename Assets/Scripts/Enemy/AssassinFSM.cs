@@ -5,9 +5,13 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class AssassinFSM : MonoBehaviour
+public class AssassinFSM : MonoBehaviour, IDamagable
 {
     // inspector values
+    [Header("Health")]
+    [SerializeField] private float maxHealth = 3f;
+    private float currentHealth;
+
     [field: Header("Movement")]
     [field: SerializeField] public float WalkSpeed { get; private set; } = 3f;
     [field: SerializeField] public float RunSpeed { get; private set; } = 6f;
@@ -122,6 +126,18 @@ public class AssassinFSM : MonoBehaviour
     {
         if (stateText == null) return;
         stateText.text = text;
+    }
+
+    // interface methods
+    public void Damage(float damage)
+    {
+        // change health
+        currentHealth -= damage;
+        // check if enemy has died
+        if (currentHealth > 0f) return;
+        // switch to death state
+        SwitchState(Death);
+        Destroy(gameObject);
     }
 
     // any state transitions

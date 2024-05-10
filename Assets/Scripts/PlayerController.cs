@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamagable
 {
     enum State 
     {
@@ -18,9 +18,11 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Coroutine coroutine;
     LayerMask obstacleMask;
+    float currentHealth;
     float timeElapsed = 0f;
     bool canBeStunned = true;
 
+    [SerializeField] float maxHealth = 5f;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float pushDuration = 1.2f;
     [SerializeField] float stunDuration = 2.5f;
@@ -38,6 +40,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         obstacleMask = LayerMask.GetMask("Obstacles");
         canBeStunned = true;
+        // set health
+        currentHealth = maxHealth;
         // hide UI game objects
         if (controlHint != null) controlHint.SetActive(false);
         // set default state
@@ -79,6 +83,17 @@ public class PlayerController : MonoBehaviour
     void OnDrawGizmosSelected() 
     {
         Gizmos.DrawWireSphere(transform.position, interationRange);
+    }
+
+    // interface methods
+    public void Damage(float damage)
+    {
+        // change health
+        currentHealth -= damage;
+        // check if player has died
+        if (currentHealth > 0f) return;
+        // switch to death state
+        currentState = State.DEATH;
     }
 
     // handle states
@@ -136,7 +151,7 @@ public class PlayerController : MonoBehaviour
         // allow stun
         canBeStunned = true;
         // do death stuff
-        Debug.Log("Player Died: Game Lost!");
+        Debug.Log("Player Died: Mission Failed!");
         Destroy(gameObject);
     }
 
