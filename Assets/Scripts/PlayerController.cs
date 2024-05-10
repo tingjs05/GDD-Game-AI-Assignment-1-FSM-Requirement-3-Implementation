@@ -33,8 +33,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     public Vector3 MoveDir { get; private set; }
 
-    public static event System.Action<PlayerController> PushedObject;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -154,7 +152,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
         if (timeElapsed >= pushDuration)
         {
-            PushedObject?.Invoke(this);
             currentState = State.IDLE;
             return;
         }
