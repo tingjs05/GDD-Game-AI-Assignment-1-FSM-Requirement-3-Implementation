@@ -15,3 +15,7 @@ In the house, there are also many display cases and shelves that are not too sta
 After you narrowly escaped from that, you tried to do the same thing to the bot. You wait, and finally have the opportunity. You push another shelf, and it falls on the bot. The bot appears to be stunned, displaying the word STUNNED on its head, and looks slightly damaged. You take this time to try getting out of the house. However, after a while, the words on the bot’s head returned to PATROL. It notices you trying to get away and rush at you. 
 <br><br>
 Noticing the damage on the bot after dropping the shelf on it, you repeated the process of dropping stuff on the bot and stunning it. Eventually, the words on his head display DEATH as it falls to the ground and lay motionless, allowing you to escape. 
+
+# FSM Overview
+![FSM Diagram](https://github.com/tingjs05/GDD-Game-AI-Assignment-1-FSM-Requirement-3-Implementation/assets/105273734/38e9da46-66e2-4e7c-9fc0-cf8a62cb96c2)
+
