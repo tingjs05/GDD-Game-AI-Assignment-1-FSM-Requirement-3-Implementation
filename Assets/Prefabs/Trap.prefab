@@ -119,4 +119,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brightMaterial: {fileID: 2100000, guid: 93096043edac33f4ea9cc3a5707663e5, type: 2}
-  useBrighterMaterial: 0
+  useBrighterMaterial: 1

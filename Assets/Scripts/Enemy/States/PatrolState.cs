@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class PatrolState : State
 {
-    Transform player;
     Vector3 point;
-    Coroutine coroutine;
+    Coroutine coroutine, _coroutine;
 
     public PatrolState(AssassinFSM fsm)
     {
@@ -21,19 +20,19 @@ public class PatrolState : State
         _fsm.SetStateText("Patrol State");
         // reset random output point
         point = Vector3.zero;
-        // reset coroutine
-        coroutine = null;
         // set agent move speed to walk speed
         _fsm.Agent.speed = _fsm.WalkSpeed;
         // start coroutine for periodic push spot check
         coroutine = _fsm.StartCoroutine(PeriodicPushSpotCheck());
+        // start coroutine for periodic place trap check
+        _coroutine = _fsm.StartCoroutine(PeriodicPlaceTrapCheck());
     }
 
     public override void OnUpdate()
     {
         // check for transition to alert state
         // check if player is within alert radius
-        if (_fsm.PlayerNearby(_fsm.AlertRadius, out player))
+        if (_fsm.PlayerNearby(_fsm.AlertRadius, out Transform player))
         {
             _fsm.SwitchState(_fsm.Alert);
             return;
@@ -56,6 +55,12 @@ public class PatrolState : State
             _fsm.StopCoroutine(coroutine);
             coroutine = null;
         }
+
+        if (_coroutine != null)
+        {
+            _fsm.StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
     }
 
     IEnumerator PeriodicPushSpotCheck()
@@ -68,5 +73,19 @@ public class PatrolState : State
         // if failed to switch to wait state, wait for another period
         else
             coroutine = _fsm.StartCoroutine(PeriodicPushSpotCheck());
+    }
+
+    IEnumerator PeriodicPlaceTrapCheck()
+    {
+        // randomly wait for seconds between two ranges
+        yield return new WaitForSeconds(Random.Range(_fsm.PlaceTrapCooldown.x, _fsm.PlaceTrapCooldown.y));
+        // randomly has a chance to transition to lay trapp state, if in a corridor
+        if (TrappablePositionManager.Instance != null && 
+            TrappablePositionManager.Instance.IsInCorridor(_fsm.transform.position) &&
+            Random.Range(0f, 1f) < _fsm.LayTrapChance)
+                _fsm.SwitchState(_fsm.LayTrap);
+        // if failed to switch to wait state, wait for another period
+        else
+            _coroutine = _fsm.StartCoroutine(PeriodicPlaceTrapCheck());
     }
 }

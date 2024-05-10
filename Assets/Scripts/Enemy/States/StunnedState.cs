@@ -35,7 +35,7 @@ public class StunnedState : State
     {
         yield return new WaitForSeconds(_fsm.StunDuration);
         coroutine = null;
-        // go into patrol state after max flee duration
+        // go into patrol state after stun duration
         _fsm.SwitchState(_fsm.Patrol);
     }
 }

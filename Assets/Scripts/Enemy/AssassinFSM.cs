@@ -28,15 +28,21 @@ public class AssassinFSM : MonoBehaviour
     [field: SerializeField] public float MaxWaitDuration { get; private set; } = 5f;
     [field: SerializeField] public float StunDuration { get; private set; } = 3f;
     [field: SerializeField] public float PushDuration { get; private set; } = 1.5f;
+    [field: SerializeField] public float LayTrapDuration { get; private set; } = 1f;
     [field: SerializeField] public Vector2 PushCheckCooldown { get; private set; } = new Vector2(3f, 5f);
+    [field: SerializeField] public Vector2 PlaceTrapCooldown { get; private set; } = new Vector2(3f, 5f);
 
     [Header("Thresholds")]
     [SerializeField, Range(0f, 1f)] private float facingEnemyThreshold = 0.8f;
     [field: SerializeField] public float MinHideDistanceThreshold { get; private set; } = 3f;
     [field: SerializeField, Range(0f, 1f)] public float PushTransitionChance { get; private set; } = 0.3f;
+    [field: SerializeField, Range(0f, 1f)] public float LayTrapChance { get; private set; } = 0.3f;
 
     [Header("UI Display")]
     [SerializeField] Text stateText;
+
+    [Header("Prefabs")]
+    [SerializeField] public GameObject trapPrefab;
 
     // other variables
     [HideInInspector] public bool canBeStunned = true;
@@ -174,6 +180,18 @@ public class AssassinFSM : MonoBehaviour
         if (playerController.MoveDir == Vector3.zero) return false;
         // use dot product to see how close the player is moving towards the enemy
         return Mathf.Abs(Vector3.Dot(playerController.MoveDir, dirFromPlayer) * dirFromPlayer.magnitude) >= facingEnemyThreshold;
+    }
+
+    // place down a trap at current location
+    public void PlaceTrap()
+    {
+        if (trapPrefab == null || TrappablePositionManager.Instance == null) return;
+        GameObject obj = Instantiate(
+                trapPrefab, 
+                new Vector3(transform.position.x, 0f, transform.position.y), 
+                Quaternion.identity, 
+                TrappablePositionManager.Instance.transform
+            );
     }
 
     // gizmos

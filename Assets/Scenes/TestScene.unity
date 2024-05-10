@@ -437,8 +437,8 @@ MonoBehaviour:
   <WalkSpeed>k__BackingField: 1
   <RunSpeed>k__BackingField: 4
   <SneakSpeed>k__BackingField: 0.5
-  <PatrolRadius>k__BackingField: 3
-  <AlertRadius>k__BackingField: 2.3
+  <PatrolRadius>k__BackingField: 8
+  <AlertRadius>k__BackingField: 3
   <AttackRange>k__BackingField: 1
   <FleeDistance>k__BackingField: 5
   <PlayerInObstacleRange>k__BackingField: 1
@@ -449,11 +449,15 @@ MonoBehaviour:
   <MaxWaitDuration>k__BackingField: 5
   <StunDuration>k__BackingField: 3
   <PushDuration>k__BackingField: 1.5
+  <LayTrapDuration>k__BackingField: 1
   <PushCheckCooldown>k__BackingField: {x: 3, y: 5}
+  <PlaceTrapCooldown>k__BackingField: {x: 3, y: 5}
   facingEnemyThreshold: 0.7
   <MinHideDistanceThreshold>k__BackingField: 3
   <PushTransitionChance>k__BackingField: 0.5
+  <LayTrapChance>k__BackingField: 0.5
   stateText: {fileID: 811420652}
+  trapPrefab: {fileID: 2134043918680145957, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
   canBeStunned: 1
 --- !u!54 &65462329
 Rigidbody:
@@ -2835,67 +2839,6 @@ Transform:
   - {fileID: 1327259294}
   m_Father: {fileID: 603853529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &9193607102919227581
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1627218649465131257, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: useBrighterMaterial
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2134043918680145957, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_Name
-      value: Trap
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7052369346421528536, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0c5257c1295826c4686e0303f74954fe, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2908,4 +2851,3 @@ SceneRoots:
   - {fileID: 1474800285}
   - {fileID: 1264627570}
   - {fileID: 1558507188}
-  - {fileID: 9193607102919227581}
