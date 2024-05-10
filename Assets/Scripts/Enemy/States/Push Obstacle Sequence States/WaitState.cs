@@ -41,7 +41,13 @@ public class WaitState : State
     public override void OnUpdate()
     {
         // check if agent has reached target destination
-        if (!(_fsm.Agent.remainingDistance <= _fsm.Agent.stoppingDistance)) return;
+        if (!(_fsm.Agent.remainingDistance <= _fsm.Agent.stoppingDistance)) 
+        {
+            // check if player is within alert range when still mocing to target location
+            // if so, transition to alert state
+            if (_fsm.PlayerNearby(_fsm.AlertRadius, out Transform player)) _fsm.SwitchState(_fsm.Alert);
+            return;
+        }
 
         // check for transition to push state
         // get reference to pushable object
@@ -72,7 +78,7 @@ public class WaitState : State
     {
         // reset agent stopping distance on exit
         _fsm.Agent.stoppingDistance = originalStoppingDistance;
-        
+
         // ensure only one coroutine runs at one time
         if (coroutine != null)
         {
