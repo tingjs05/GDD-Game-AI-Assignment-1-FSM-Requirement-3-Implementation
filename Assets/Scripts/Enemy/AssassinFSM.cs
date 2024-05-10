@@ -38,6 +38,9 @@ public class AssassinFSM : MonoBehaviour
     [Header("UI Display")]
     [SerializeField] Text stateText;
 
+    // other variables
+    [HideInInspector] public bool canBeStunned = true;
+
     // states
     private State currentState;
 
@@ -87,6 +90,9 @@ public class AssassinFSM : MonoBehaviour
         // get nav agent
         Agent = GetComponent<NavMeshAgent>();
 
+        // set can be stunned boolean
+        canBeStunned = true;
+
         // set default state
         currentState = Patrol;
         currentState?.OnEnter();
@@ -115,6 +121,7 @@ public class AssassinFSM : MonoBehaviour
     // any state transitions
     public void Stun()
     {
+        if (!canBeStunned) return;
         SwitchState(Stunned);
     }
 

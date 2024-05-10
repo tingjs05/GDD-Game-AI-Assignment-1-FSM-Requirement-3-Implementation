@@ -441,12 +441,18 @@ MonoBehaviour:
   <AlertRadius>k__BackingField: 2.3
   <AttackRange>k__BackingField: 1
   <FleeDistance>k__BackingField: 5
+  <PlayerInObstacleRange>k__BackingField: 1
   <AttackDuration>k__BackingField: 0.25
   <MaxFleeDuration>k__BackingField: 5
   <MinFaceEnemyDuration>k__BackingField: 0.5
   <MaxHideDuration>k__BackingField: 5
+  <MaxWaitDuration>k__BackingField: 5
+  <StunDuration>k__BackingField: 3
+  <PushDuration>k__BackingField: 1.5
+  <PushCheckCooldown>k__BackingField: {x: 3, y: 5}
   facingEnemyThreshold: 0.7
-  MinHideDistanceThreshold: 3
+  <MinHideDistanceThreshold>k__BackingField: 3
+  <PushTransitionChance>k__BackingField: 0.5
   stateText: {fileID: 811420652}
 --- !u!54 &65462329
 Rigidbody:

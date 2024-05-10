@@ -33,6 +33,10 @@ public class PushableObject : MonoBehaviour
         pushSpot = HidingPositionManager.Instance.PushingSpots
             .OrderBy(x => Vector3.Distance(transform.position, x))
             .ToArray()[0];
+        
+        // remove push spot, and add to hiding spot
+        HidingPositionManager.Instance.PushingSpots.Remove(pushSpot);
+        HidingPositionManager.Instance.HidingSpots.Add(pushSpot);
 
         // start coroutine to slowly drop pillar
         StartCoroutine(Drop());

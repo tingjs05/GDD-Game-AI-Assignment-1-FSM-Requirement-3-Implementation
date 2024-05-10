@@ -17,6 +17,8 @@ public class PushState : State
         Debug.Log("PUSH: push obstacle in an attempt to hit the player. ");
         // set state text in UI
         _fsm.SetStateText("Push State");
+        // prevent self from getting stunned
+        _fsm.canBeStunned = false;
         // get reference to pushable object
         Collider[] hit = Physics.OverlapSphere(_fsm.transform.position, _fsm.Agent.stoppingDistance, LayerMask.GetMask("Obstacles"));
         // try to get pushable object script
@@ -32,13 +34,16 @@ public class PushState : State
         
         // if drop was successful
         // move agent to push spot
-        _fsm.Agent.Move(pushSpot);
+        _fsm.Agent.Warp(pushSpot);
         // start coroutine to count exit time
         coroutine = _fsm.StartCoroutine(WaitForState());
     }
 
     public override void OnExit()
     {
+        // allow stun
+        _fsm.canBeStunned = true;
+
         // ensure only one coroutine runs at one time
         if (coroutine != null)
         {
@@ -49,7 +54,7 @@ public class PushState : State
 
     IEnumerator WaitForState()
     {
-        yield return new WaitForSeconds(_fsm.MaxWaitDuration);
+        yield return new WaitForSeconds(_fsm.PushDuration);
         coroutine = null;
         // return to patrol after carrying out action
         _fsm.SwitchState(_fsm.Patrol);

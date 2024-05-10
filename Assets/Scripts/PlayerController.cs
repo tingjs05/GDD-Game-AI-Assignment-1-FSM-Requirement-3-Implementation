@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     Coroutine coroutine;
     LayerMask obstacleMask;
     float timeElapsed = 0f;
+    bool canBeStunned = true;
 
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] float pushDuration = 1.2f;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         // assign variables
         rb = GetComponent<Rigidbody>();
         obstacleMask = LayerMask.GetMask("Obstacles");
+        canBeStunned = true;
         // hide UI game objects
         if (controlHint != null) controlHint.SetActive(false);
         // set default state
@@ -84,12 +86,19 @@ public class PlayerController : MonoBehaviour
     {
         // reset move direction
         MoveDir = Vector3.zero;
+        // allow stun
+        canBeStunned = true;
+        // check transition to moving
         if (new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) == Vector2.zero) return;
         currentState = State.MOVING;
     }
 
     void moving()
     {
+        // allow stun
+        canBeStunned = true;
+
+        // get move direction
         MoveDir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
         
         // check for state transition to idle
@@ -105,6 +114,8 @@ public class PlayerController : MonoBehaviour
 
     void pushing()
     {
+        // do not allow self stun
+        canBeStunned = false;
         // reset move direction
         MoveDir = Vector3.zero;
 
@@ -122,6 +133,9 @@ public class PlayerController : MonoBehaviour
     {
         // reset move direction
         MoveDir = Vector3.zero;
+        // allow stun
+        canBeStunned = true;
+        // do death stuff
         Debug.Log("Player Died: Game Lost!");
         Destroy(gameObject);
     }
@@ -130,6 +144,8 @@ public class PlayerController : MonoBehaviour
     {
         // reset move direction
         MoveDir = Vector3.zero;
+        // double stunning not allowed
+        canBeStunned = false;
         // wait for stun duration
         yield return new WaitForSeconds(stunDuration);
         coroutine = null;
@@ -172,6 +188,7 @@ public class PlayerController : MonoBehaviour
 
     public void Stun()
     {
+        if (!canBeStunned) return;
         currentState = State.STUNNED;
     }
 }

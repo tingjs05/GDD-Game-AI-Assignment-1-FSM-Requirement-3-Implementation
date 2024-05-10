@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class WaitState : State
 {
+    Vector3 targetPosition;
     Coroutine coroutine;
 
     public WaitState(AssassinFSM fsm)
@@ -23,7 +24,7 @@ public class WaitState : State
         // reset coroutine
         coroutine = null;
         // get position to move to
-        Vector3 targetPosition = HidingPositionManager.Instance.PushingSpots
+        targetPosition = HidingPositionManager.Instance.PushingSpots
             .OrderBy(x => Vector3.Distance(_fsm.transform.position, x))
             .ToArray()[0];
         // set agent move speed to walk speed
@@ -60,6 +61,8 @@ public class WaitState : State
         // only start a new coroutine if there are currently no coroutines running
         if (coroutine != null) return;
         coroutine = _fsm.StartCoroutine(WaitForState());
+        // move agent to push spot
+        _fsm.Agent.Warp(targetPosition);
     }
 
     public override void OnExit()
