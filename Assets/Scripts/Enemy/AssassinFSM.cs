@@ -201,7 +201,7 @@ public class AssassinFSM : MonoBehaviour
         // instantiate trap prefab
         GameObject obj = Instantiate(
                 trapPrefab, 
-                new Vector3(transform.position.x, 0f, transform.position.y), 
+                new Vector3(transform.position.x, 0f, transform.position.z), 
                 Quaternion.identity, 
                 TrappablePositionManager.Instance.transform
             );
