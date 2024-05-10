@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour, IDamagable
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] float pushDuration = 1.2f;
     [SerializeField] float stunDuration = 2.5f;
     [SerializeField] float interationRange = 1f;
+    [SerializeField] Slider healthBar;
     [SerializeField] GameObject controlHint;
 
     public Vector3 MoveDir { get; private set; }
@@ -40,8 +42,16 @@ public class PlayerController : MonoBehaviour, IDamagable
         rb = GetComponent<Rigidbody>();
         obstacleMask = LayerMask.GetMask("Obstacles");
         canBeStunned = true;
+
         // set health
         currentHealth = maxHealth;
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = maxHealth;
+            healthBar.gameObject.SetActive(false);
+        }
+
         // hide UI game objects
         if (controlHint != null) controlHint.SetActive(false);
         // set default state
@@ -90,6 +100,12 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         // change health
         currentHealth -= damage;
+        // update health bar
+        if (healthBar != null)
+        { 
+            if (!healthBar.gameObject.activeInHierarchy) healthBar.gameObject.SetActive(true);
+            healthBar.value = currentHealth;
+        }
         // check if player has died
         if (currentHealth > 0f) return;
         // switch to death state

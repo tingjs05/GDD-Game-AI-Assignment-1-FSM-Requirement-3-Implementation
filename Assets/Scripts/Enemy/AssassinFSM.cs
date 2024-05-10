@@ -10,6 +10,7 @@ public class AssassinFSM : MonoBehaviour, IDamagable
     // inspector values
     [Header("Health")]
     [SerializeField] private float maxHealth = 3f;
+    [SerializeField] private Slider healthBar;
     private float currentHealth;
 
     [field: Header("Movement")]
@@ -102,6 +103,14 @@ public class AssassinFSM : MonoBehaviour, IDamagable
 
         // set can be stunned boolean
         canBeStunned = true;
+        // set health
+        currentHealth = maxHealth;
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = maxHealth;
+            healthBar.gameObject.SetActive(false);
+        }
 
         // set default state
         currentState = Patrol;
@@ -133,6 +142,12 @@ public class AssassinFSM : MonoBehaviour, IDamagable
     {
         // change health
         currentHealth -= damage;
+        // update health bar
+        if (healthBar != null)
+        { 
+            if (!healthBar.gameObject.activeInHierarchy) healthBar.gameObject.SetActive(true);
+            healthBar.value = currentHealth;
+        }
         // check if enemy has died
         if (currentHealth > 0f) return;
         // switch to death state
