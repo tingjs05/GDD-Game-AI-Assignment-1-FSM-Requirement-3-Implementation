@@ -98,6 +98,8 @@ public class PlayerController : MonoBehaviour, IDamagable
     // interface methods
     public void Damage(float damage)
     {
+        // prevent damage when pushing (aka when cannot be stunned)
+        if (!canBeStunned) return;
         // change health
         currentHealth -= damage;
         // update health bar
