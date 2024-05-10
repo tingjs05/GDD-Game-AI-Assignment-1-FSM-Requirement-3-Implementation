@@ -7,6 +7,7 @@ public class WaitState : State
 {
     Vector3 targetPosition;
     Coroutine coroutine;
+    float originalStoppingDistance;
 
     public WaitState(AssassinFSM fsm)
     {
@@ -23,6 +24,10 @@ public class WaitState : State
         if (HidingPositionManager.Instance == null) return;
         // reset coroutine
         coroutine = null;
+        // save original agent stop distance
+        originalStoppingDistance = _fsm.Agent.stoppingDistance;
+        // set new agent stopping distance (don't stop too far from waiting spot)
+        _fsm.Agent.stoppingDistance = 0.1f;
         // get position to move to
         targetPosition = HidingPositionManager.Instance.PushingSpots
             .OrderBy(x => Vector3.Distance(_fsm.transform.position, x))
@@ -61,12 +66,13 @@ public class WaitState : State
         // only start a new coroutine if there are currently no coroutines running
         if (coroutine != null) return;
         coroutine = _fsm.StartCoroutine(WaitForState());
-        // move agent to push spot
-        _fsm.Agent.Warp(targetPosition);
     }
 
     public override void OnExit()
     {
+        // reset agent stopping distance on exit
+        _fsm.Agent.stoppingDistance = originalStoppingDistance;
+        
         // ensure only one coroutine runs at one time
         if (coroutine != null)
         {

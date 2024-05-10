@@ -17,6 +17,8 @@ public class LayTrapState : State
         Debug.Log("LAY_TRAP: place down a trap at current position. ");
         // set state text in UI
         _fsm.SetStateText("Lay Trap State");
+        // do not let agent move when in this state
+        _fsm.Agent.speed = 0f;
         // place down trap
         _fsm.PlaceTrap();
         // start coroutine to count lay trap duration

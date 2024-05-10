@@ -17,6 +17,8 @@ public class PushState : State
         Debug.Log("PUSH: push obstacle in an attempt to hit the player. ");
         // set state text in UI
         _fsm.SetStateText("Push State");
+        // do not let agent move when in this state
+        _fsm.Agent.speed = 0f;
         // prevent self from getting stunned
         _fsm.canBeStunned = false;
         // get reference to pushable object

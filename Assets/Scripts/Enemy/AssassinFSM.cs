@@ -131,6 +131,18 @@ public class AssassinFSM : MonoBehaviour
         SwitchState(Stunned);
     }
 
+    void TrapHasBeenTriggered(Trap trap)
+    {
+        // switch state to trap triggered state
+        SwitchState(TrapTriggered);
+        // set agent destination to trap destination
+        Agent.SetDestination(trap.transform.position);
+        // unsubscribe from event
+        trap.TrapTriggered -= TrapHasBeenTriggered;
+        // destroy trap
+        Destroy(trap.gameObject);
+    }
+
     // check if player is nearby within a certain range around the enemy
     public bool PlayerNearby(float range, out Transform player)
     {
@@ -186,12 +198,15 @@ public class AssassinFSM : MonoBehaviour
     public void PlaceTrap()
     {
         if (trapPrefab == null || TrappablePositionManager.Instance == null) return;
+        // instantiate trap prefab
         GameObject obj = Instantiate(
                 trapPrefab, 
                 new Vector3(transform.position.x, 0f, transform.position.y), 
                 Quaternion.identity, 
                 TrappablePositionManager.Instance.transform
             );
+        // subscribe to event to listen for when trap is triggered
+        obj.GetComponent<Trap>().TrapTriggered += TrapHasBeenTriggered;
     }
 
     // gizmos

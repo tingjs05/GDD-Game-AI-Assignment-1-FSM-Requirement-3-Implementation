@@ -17,6 +17,8 @@ public class StunnedState : State
         Debug.Log("STUN: cannot move or perform any actions during stun duration. ");
         // set state text in UI
         _fsm.SetStateText("Stunned State");
+        // do not let agent move when in this state
+        _fsm.Agent.speed = 0f;
         // start coroutine to count stun duration
         coroutine = _fsm.StartCoroutine(WaitForState());
     }
